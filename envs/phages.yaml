@@ -1,0 +1,6 @@
+name: phages
+channels:
+  - defaults
+dependencies:
+  - blast
+prefix: /home/andy/miniconda3/envs/phages
