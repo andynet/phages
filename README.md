@@ -24,7 +24,8 @@ Downloaded `data/NC_001416.fasta`.
 conda create -n phages
 conda activate phages
 conda install -c bioconda blast
-conda env export --from-history > phages.yaml
+conda install -c anaconda -c conda-forge spyder pandas biopythonconda install -c anaconda -c conda-forge spyder pandas biopython
+conda env export --from-history > envs/phages.yaml
 
 makeblastdb -in data/sequences.fasta -out data/db -dbtype nucl
 blastn -db data/db -query data/NC_001416.fasta -outfmt "6 qseqid sseqid qlen slen length pident" -qcov_hsp_perc 10 \

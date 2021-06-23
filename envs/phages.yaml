@@ -3,4 +3,7 @@ channels:
   - defaults
 dependencies:
   - blast
+  - biopython
+  - pandas
+  - spyder
 prefix: /home/andy/miniconda3/envs/phages
