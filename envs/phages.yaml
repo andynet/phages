@@ -3,7 +3,11 @@ channels:
   - defaults
 dependencies:
   - blast
-  - biopython
-  - pandas
   - spyder
+  - pandas
+  - biopython
+  - multiz
+  - lastz
+  - igv
+  - seqkit
 prefix: /home/andy/miniconda3/envs/phages

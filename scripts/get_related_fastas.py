@@ -14,10 +14,10 @@ from Bio import SeqIO
 
 df = pd.read_csv("../data/NC_001416.blast", sep='\t', header=None)
 df.columns = ["qseqid", "sseqid", "qlen", "slen", "length", "pident"]
-df = df.head(n=8)
+df = df.head(n=29)
 
 # %%
-with open("../data/sequences.fasta") as f:
+with open("../data/unique.fasta") as f:
     records = list(SeqIO.parse(f, "fasta"))
     
 # %%
