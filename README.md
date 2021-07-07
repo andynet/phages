@@ -24,7 +24,7 @@ Downloaded `data/NC_001416.fasta`.
 some how-to guides:
 - http://genomewiki.ucsc.edu/index.php/Whole_genome_alignment_howto
 - http://www.bx.psu.edu/miller_lab/dist/tba_howto.pdf
-- http://pipmaker.bx.psu.edu/dist/tba.pdf
+- http://pipmaker.bx.psu.edu/dist/tba.pdf  (2004)
 - https://anaconda.org/bioconda/multiz
 
 ```
@@ -43,15 +43,36 @@ blastn -db data/unique -query data/NC_001416.fasta -outfmt "6 qseqid sseqid qlen
 
 python scripts/get_related_fastas.py
 
-sed '2q'        NC_001416_related.fasta > s1
-sed '1,2d;4q'   NC_001416_related.fasta > s2
-...
-sed '1,10d;12q' NC_001416_related.fasta > s6
+cd data
+seqkit split2 -O NC_001416_related.split -s 1 NC_001416_related.fasta
+cd NC_001416_related.split
 
-# edit the fasta descriptions
+phages=""
+for file in $(ls); do
+    sed -i 's/\(>\w\+\).*/\1/' ${file}
+    tmp=$(head -n 1 ${file})
+    phages="${tmp:1} ${phages}"
+    mv ${file} ${tmp:1}
+done;
 
-all_bz + "(s1 (s2 (s3 (s4 (s5 s6)))))"
-tba "(s1 (s2 (s3 (s4 (s5 s6)))))" *.*.maf tba.maf
-maf_project tba.maf s1 > s1_projected.maf
+tree=""
+for id in ${phages}; do
+    tree="${tree}(${id} ";
+done;
+for id in ${phages}; do
+    tree="${tree})";
+done;
 
+all_bz + "${tree}"
+tba "${tree}" *.sing.maf tba.maf
+maf_project tba.maf NC_001416 > NC_001416_projected.maf
+
+```
+
+```
+blastzWrapper MN855678.fna CP025712.fna Y=9000 H=0  | lav2maf /dev/stdin MN855678.fna CP025712.fna | maf_sort /dev/stdin MN855678.fna > MN855678.fna.CP025712.fna.orig.maf
+
+single_cov2 NC_019723.fna.MN855678.fna.orig.maf  > NC_019723.fna.MN855678.fna.sing.maf
+
+tba.v12: no alignment found for MN855681.fna and CP025712.fna
 ```

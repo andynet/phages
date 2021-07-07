@@ -12,12 +12,12 @@ from Bio import SeqIO
 
 # %%
 
-df = pd.read_csv("../data/NC_001416.blast", sep='\t', header=None)
+df = pd.read_csv("data/NC_001416.blast", sep='\t', header=None)
 df.columns = ["qseqid", "sseqid", "qlen", "slen", "length", "pident"]
 df = df.head(n=29)
 
 # %%
-with open("../data/unique.fasta") as f:
+with open("data/unique.fasta") as f:
     records = list(SeqIO.parse(f, "fasta"))
     
 # %%
@@ -27,5 +27,5 @@ for record in records:
         related_records.append(record)
         
 # %%
-with open("../data/NC_001416_related.fasta", "w") as f:
+with open("data/NC_001416_related.fasta", "w") as f:
     SeqIO.write(related_records, f, "fasta-2line")
