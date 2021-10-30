@@ -1,3 +1,21 @@
+# extract related sequences
+```
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+
+conda install blast seqkit seqtk cactus
+
+seqkit rmdup -s -d duplicates.fasta < sequences.fasta > unique.fasta
+makeblastdb -in unique.fasta -out unique -dbtype nucl
+
+seqtk seq -l0 sequences.fasta | grep -A 1 NC_001422 > NC_001422.fasta
+blastn -db unique -query NC_001422.fasta -outfmt "6 qseqid sseqid qlen slen length pident" -qcov_hsp_perc 10 > NC_001422.blast
+
+less NC_001422.blast | head -n 163 | cut -f2 | sort | uniq > NC_001422.list
+seqtk seq -l0 sequences.fasta | grep -A 1 --no-group-separator -f NC_001422.list > NC_001422.related.fasta
+
+```
 # Cactus how to
 ```
 source /opt/cactus-2.0.3/cactus_env-3.8/bin/activate
