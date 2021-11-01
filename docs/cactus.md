@@ -13,7 +13,20 @@ seqtk seq -l0 sequences.fasta | grep -A 1 NC_001422 > NC_001422.fasta
 blastn -db unique -query NC_001422.fasta -outfmt "6 qseqid sseqid qlen slen length pident" -qcov_hsp_perc 10 > NC_001422.blast
 
 less NC_001422.blast | head -n 163 | cut -f2 | sort | uniq > NC_001422.list
-seqtk seq -l0 sequences.fasta | grep -A 1 --no-group-separator -f NC_001422.list > NC_001422.related.fasta
+seqtk seq -l0 sequences.fasta | grep -A 1 --no-group-separator -f NC_001422.list > NC_001422.related.fna
+
+seqkit split2 -O NC_001422.fna.split -s 1 NC_001422.related.fna
+ls -1 NC_001422.fna.split > NC_001422.fna.list
+cvtree -G NC_001422.fna.split -i NC_001422.fna.list -g fna
+
+cp tree/Hao.fna.cv5.nwk NC_001422.cactus.txt
+
+less NC_001422.list | sed "s/.fasta//g" | sed "s/\(.*\)/\1 \.\/NC_001422\.fna\.split\/\1\.fna/g" > NC_001422.paths
+cat NC_001422.cactus.txt NC_001422.paths > NC_001422.txt
+
+cactus jobstore NC_001422.txt NC_001422.hal --binariesMode local
+conda install networkx==1.11
+
 
 ```
 # Cactus how to
